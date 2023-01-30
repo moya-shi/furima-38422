@@ -1,5 +1,5 @@
 class PurchaseDestination
-  include ActiveMOdel::Model
+  include ActiveModel::Model
   attr_accessor :purchase, :postcode, :shipping_address, :municipality, :address, :building, :phone_number, :user_id, :item_id
 
   with_options presence: true do
@@ -22,7 +22,7 @@ class PurchaseDestination
   end
 
   def destination_params
-    params.require(:destionation).permit(:postcode, :shipping_address_id, :municipality, :address, :building, :phone_number).merge(purchase_id: purchase.id)
+    params.require(:destination).permit(:postcode, :shipping_address_id, :municipality, :address, :building, :phone_number).merge(purchase_id: purchase.id)
   end
   
 end
