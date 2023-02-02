@@ -5,6 +5,7 @@ class CreateDestinations < ActiveRecord::Migration[6.0]
       t.string :postcode, null: false
       t.integer :shipping_address_id, null: false
       t.string :municipality, null: false
+      t.string :address, null: false
       t.string :building
       t.string :phone_number, null:false
       t.timestamps
