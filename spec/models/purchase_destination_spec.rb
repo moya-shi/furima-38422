@@ -1,0 +1,66 @@
+require 'rails_helper'
+
+RSpec.describe PurchaseDestination, type: :model do
+  before do
+    @purchase_destination = FactoryBot.build(:purchase_destination)
+  end
+  describe '購入内容確認' do
+    context '商品購入できる時' do
+      it '全てのデータが存在すれば購入できる' do
+        expect(@purchase_destination).to be_valid
+      end
+    end
+    context '商品購入ができない時' do
+      it '郵便番号が空だと購入できない' do
+        @purchase_destination.postcode = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Postcode can't be blank")
+      end
+      it '郵便番号にハイフンがないと購入できない' do
+        @purchase_destination.postcode = "1234567"
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Postcode is invalid")
+      end
+      it '都道府県が未選択では購入できない' do
+        @purchase_destination.shipping_address_id = "1"
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Shipping address can't be blank")
+      end
+      it '市町村が空では購入できない' do
+        @purchase_destination.municipality = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Municipality can't be blank")
+      end
+      it '番地が空では購入できない' do
+        @purchase_destination.address = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Address can't be blank")
+      end
+      it '電話番号が空では購入できない' do
+        @purchase_destination.phone_number = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Phone number can't be blank")
+      end
+      it '電話番号が10桁未満の数字では登録できない' do
+        @purchase_destination.phone_number = 0 + Faker::Number.between(from: 0, to: 99999999)
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Phone number is invalid")
+      end
+      it '電話番号が12桁以上の数字では登録できない' do
+        @purchase_destination.phone_number = 0 + Faker::Number.between(from: 99999999999, to: 99999999999999999999)
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Phone number is invalid")
+      end
+      it '電話番号が全角数値では登録できない' do
+        @purchase_destination.phone_number = "０９０１２３４５６７８"
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Phone number is invalid")
+      end
+      it '電話番号が数値以外では登録できない' do
+        @purchase_destination.phone_number = '----------'
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Phone number is invalid")
+      end
+    end
+  end
+end
