@@ -61,6 +61,21 @@ RSpec.describe PurchaseDestination, type: :model do
         @purchase_destination.valid?
         expect(@purchase_destination.errors.full_messages).to include("Phone number is invalid")
       end
+      it 'user_idが空では登録できない' do
+        @purchase_destination.user_id = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("User can't be blank")
+      end
+      it 'item_idが空では登録できない' do
+        @purchase_destination.item_id = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Item can't be blank")
+      end
+      it 'トークンが空では保存できないこと' do
+        @purchase_destination.token = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Token can't be blank")
+      end
     end
   end
 end
