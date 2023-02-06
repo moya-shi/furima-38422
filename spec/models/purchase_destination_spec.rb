@@ -2,11 +2,18 @@ require 'rails_helper'
 
 RSpec.describe PurchaseDestination, type: :model do
   before do
-    @purchase_destination = FactoryBot.build(:purchase_destination)
+    user = FactoryBot.create(:user)
+    item = FactoryBot.create(:item)
+    @purchase_destination = FactoryBot.build(:purchase_destination, user_id: user.id, item_id: item.id)
+    sleep(0.1)
   end
   describe '購入内容確認' do
     context '商品購入できる時' do
       it '全てのデータが存在すれば購入できる' do
+        expect(@purchase_destination).to be_valid
+      end
+      it '建物名が空でも購入できる' do
+        @purchase_destination.building = ""
         expect(@purchase_destination).to be_valid
       end
     end
