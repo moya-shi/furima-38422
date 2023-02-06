@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    unless current_user == @item.user
+    if Purchase.exists?(item_id: @item.id) || current_user != @item.user
       redirect_to action: :index
     end
   end
